@@ -5,17 +5,29 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 import google.generativeai as gemini_client
 
-client = QdrantClient(host="localhost", port=30100)
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+qdrant_host = os.environ.get("QDRANT_HOST")
+qdrant_port = os.environ.get("QDRANT_PORT")
+
+print(qdrant_host)
+print(qdrant_port)
+
+client = QdrantClient(host=qdrant_host, port=qdrant_port)
 
 collection_name="test_recommend"
 
-client.recreate_collection(
-   collection_name=collection_name,
-   vectors_config=VectorParams(size=768, distance=Distance.COSINE),
-)
+# client.recreate_collection(
+#    collection_name=collection_name,
+#    vectors_config=VectorParams(size=768, distance=Distance.COSINE),
+# )
 
-GEMINI_API_KEY = ""
-gemini_client.configure(api_key=GEMINI_API_KEY)
+GEMINI_KEY=api_key=os.environ.get("GEMINI_API_KEY")
+print(GEMINI_KEY)
+gemini_client.configure(api_key=GEMINI_KEY)
 
 app = FastAPI()
 
