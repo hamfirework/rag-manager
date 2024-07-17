@@ -67,7 +67,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 class SentenceRequest(BaseModel):
-    sentences: List[str]
+    sentences: List[object]
 
 
 @app.get("/rag/db_sync")
@@ -135,9 +135,9 @@ def qdrant_insert_sentences(datas, collection_name):
     results = [
         gemini_client.embed_content(
             model="models/embedding-001",
-            content=data["title"],
+            content=data["content"],
             task_type="retrieval_document",
-            title=data["content"],
+            title=data["title"],
         )
         for data in datas
     ]
