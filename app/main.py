@@ -34,6 +34,7 @@ collection_db_name="test_db"
 #    vectors_config=VectorParams(size=768, distance=Distance.COSINE),
 # )
 
+
 GEMINI_KEY=api_key=os.environ.get("GEMINI_API_KEY")
 print(GEMINI_KEY)
 gemini_client.configure(api_key=GEMINI_KEY)
@@ -151,12 +152,12 @@ def qdrant_insert_sentences(datas, collection_name):
     return client.upsert(collection_name, points)
 
 @app.get("/rag/sentence/search")
-def find_similar_sentences(query_sentence, top_k=10):
+def find_similar_sentences(query, top_k=10):
     results = client.search(
         collection_name=collection_recommend_name,
         query_vector=gemini_client.embed_content(
             model="models/embedding-001",
-            content=query_sentence,
+            content=query,
             task_type="retrieval_query",
         )["embedding"],
     )
